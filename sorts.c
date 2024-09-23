@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 void printArray(int[], int);
 
@@ -27,8 +28,8 @@ void heapify();
 void heapSort();
 void tournamentSort();
 
-void bubbleSort();
-void combSort();
+void bubbleSort(int[],int);
+void combSort(int[], int);
 
 int main()
 {
@@ -48,4 +49,25 @@ void printArray(int arr[], int size)
         }
     }
     printf("}\n\n");
+}
+
+void bubbleSort(int arr[], int size)
+{
+    int tmp;
+    bool swapped = true;
+
+    for(int i = 0; i < size - 1 && swapped; i++)
+    {
+        swapped = false;
+        for(int ndx; ndx < size - i - 1; ndx++)
+        {
+            if(arr[ndx] > arr[ndx+1])
+            {
+                tmp = arr[ndx];
+                arr[ndx] = arr[ndx + 1];
+                arr[ndx + 1] = tmp;
+                swapped = true; 
+            }
+        }
+    }
 }
