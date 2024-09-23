@@ -36,7 +36,7 @@ int main()
     return 0;
 }
 
-void printArray(int *arr, int size)
+void printArray(int arr[], int size)
 {
     printf("{");
     for(int n = 0; n < size; n++)
