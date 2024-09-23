@@ -71,3 +71,28 @@ void bubbleSort(int arr[], int size)
         }
     }
 }
+
+void combSort(int arr[], int size)
+{
+    int tmp;
+    bool swapped = true;
+    int gap = size;
+    bool swapped = true;
+
+    while(gap != 1 || swapped)
+    {
+        gap = (gap < 1) ? 1 : gap * 10 / 13;
+        swapped = false;
+
+        for(int ndx = 0; ndx < size - gap; ndx++)
+        {
+            if(arr[ndx] > arr[ndx + gap])
+            {
+                tmp = arr[ndx];
+                arr[ndx] = arr[ndx + gap];
+                arr[ndx + gap] = tmp;
+                swapped = true;
+            }
+        }
+    }
+}
