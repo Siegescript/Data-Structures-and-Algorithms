@@ -50,3 +50,17 @@ void generateArray(int *arr, int size, int max)
         arr[n] = rand() % max;
     }
 }
+
+void printArray(int *arr, int size)
+{
+    printf("{");
+    for(int n = 0; n < size; n++)
+    {
+        printf("%d", arr[n]);
+        if(n > 0 && n != size)
+        {
+            printf(", ");
+        }
+    }
+    printf("}");
+}
