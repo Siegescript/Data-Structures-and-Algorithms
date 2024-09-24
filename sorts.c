@@ -75,7 +75,6 @@ void bubbleSort(int arr[], int size)
 void combSort(int arr[], int size)
 {
     int tmp;
-    bool swapped = true;
     int gap = size;
     bool swapped = true;
 
