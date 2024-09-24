@@ -61,7 +61,6 @@ void printArray(int arr[], int size)
 
 void bubbleSort(int arr[], int size)
 {
-    int tmp;
     bool swapped = true;
 
     for(int i = 0; i < size - 1 && swapped; i++)
@@ -71,9 +70,7 @@ void bubbleSort(int arr[], int size)
         {
             if(arr[ndx] > arr[ndx+1])
             {
-                tmp = arr[ndx];
-                arr[ndx] = arr[ndx + 1];
-                arr[ndx + 1] = tmp;
+                swap(&arr[ndx], &arr[ndx + 1]);
                 swapped = true; 
             }
         }
@@ -82,7 +79,6 @@ void bubbleSort(int arr[], int size)
 
 void combSort(int arr[], int size)
 {
-    int tmp;
     int gap = size;
     bool swapped = true;
 
@@ -95,9 +91,7 @@ void combSort(int arr[], int size)
         {
             if(arr[ndx] > arr[ndx + gap])
             {
-                tmp = arr[ndx];
-                arr[ndx] = arr[ndx + gap];
-                arr[ndx + gap] = tmp;
+                swap(&arr[ndx], &arr[ndx + gap]);
                 swapped = true;
             }
         }
