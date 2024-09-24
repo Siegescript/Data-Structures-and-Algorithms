@@ -7,7 +7,7 @@ void printArray(int[], int);
 
 void selectionSort();
 
-void insertionSort();
+void insertionSort(int[], int);
 void shellSort();
 
 void quickSort();
@@ -29,7 +29,7 @@ void heapify();
 void heapSort();
 void tournamentSort();
 
-void bubbleSort(int[],int);
+void bubbleSort(int[], int);
 void combSort(int[], int);
 
 int main()
@@ -57,6 +57,19 @@ void printArray(int arr[], int size)
         }
     }
     printf("}\n\n");
+}
+
+void insertionSort(int arr[], int size)
+{
+    for (int i = 1, ndx = i - 1, key; i < size; i++, ndx--) {
+        key = arr[i];
+        
+        while (ndx >= 0 && arr[ndx] > key) {
+            arr[ndx + 1] = arr[ndx];
+            ndx = ndx - 1;
+        }
+        arr[ndx + 1] = key;
+    }
 }
 
 void bubbleSort(int arr[], int size)
