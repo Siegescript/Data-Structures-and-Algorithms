@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+void swap(int*, int*);
 void printArray(int[], int);
 
 void selectionSort();
@@ -35,6 +36,13 @@ int main()
 {
 
     return 0;
+}
+
+void swap(int *A, int *B)
+{
+    int tmp = *A;
+    *A = *B;
+    *B = *A;
 }
 
 void printArray(int arr[], int size)
