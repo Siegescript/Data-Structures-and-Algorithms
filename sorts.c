@@ -61,14 +61,12 @@ void printArray(int arr[], int size)
 
 void insertionSort(int arr[], int size)
 {
-    for (int i = 1, ndx = i - 1, key; i < size; i++, ndx--) {
-        key = arr[i];
-        
-        while (ndx >= 0 && arr[ndx] > key) {
+    for(int i = 1, ndx; i < size; i++) {
+        ndx = i - 1; 
+        for(; ndx >= 0 && arr[ndx] > arr[i]; ndx--) {
             arr[ndx + 1] = arr[ndx];
-            ndx = ndx - 1;
         }
-        arr[ndx + 1] = key;
+        arr[ndx + 1] = arr[ndx];
     }
 }
 
