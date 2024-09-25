@@ -61,12 +61,29 @@ void printArray(int arr[], int size)
 
 void insertionSort(int arr[], int size)
 {
-    for(int i = 1, ndx; i < size; i++) {
-        ndx = i - 1; 
+    for(int i = 1, ndx; i < size; i++) 
+    { 
+        ndx = i - 1;
         for(; ndx >= 0 && arr[ndx] > arr[i]; ndx--) {
             arr[ndx + 1] = arr[ndx];
         }
         arr[ndx + 1] = arr[ndx];
+    }
+}
+
+void shellSort(int arr[], int size)
+{
+    for (int gap = size / 2; gap > 0; gap /= 2)
+    {
+        for (int i = gap, ndx; i < size; i++)
+        {  
+            ndx = i;
+            for (; ndx >= gap && arr[ndx - gap] > arr[i]; ndx -= gap)
+            {
+                arr[ndx] = arr[ndx - gap];
+            }
+            arr[ndx] = arr[i];
+        }
     }
 }
 
