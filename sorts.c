@@ -5,10 +5,10 @@
 void swap(int*, int*);
 void printArray(int[], int);
 
-void selectionSort();
+void selectionSort(int[], int);
 
 void insertionSort(int[], int);
-void shellSort();
+void shellSort(int[], int);
 
 void quickSort();
 int partition();
@@ -57,6 +57,25 @@ void printArray(int arr[], int size)
         }
     }
     printf("}\n\n");
+}
+
+void selectionSort(int arr[], int size)
+{
+    for(int i = 0, ndx, min; i < size - 1; i++)
+    {
+        min = i;
+        for(ndx = i + 1; ndx < size; ndx++)
+        {
+            if (arr[ndx] < arr[min])
+            {
+                min = ndx;
+            }
+            if(min != i)
+            {
+                swap(&arr[min], &arr[i]);
+            }
+        }
+    }
 }
 
 void insertionSort(int arr[], int size)
