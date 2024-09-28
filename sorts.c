@@ -26,6 +26,7 @@ void gnomeSort();
 void strandSort();
 
 void heapify();
+int deleteMin();
 void heapSort();
 void tournamentSort();
 
