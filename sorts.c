@@ -28,7 +28,7 @@ void strandSort();
 
 void heapify(int[], int, int);
 void heapSort(int[], int);
-void tournamentSort();
+void tournamentSort(int[], int);
 
 void bubbleSort(int[], int);
 void combSort(int[], int);
@@ -52,6 +52,9 @@ int main()
     int size_small = sizeof(small_array) / sizeof(small_array[0]);
     int size_large = sizeof(large_array) / sizeof(large_array[0]);
 
+    printArray(small_array, size_small);
+    tournamentSort(small_array, size_small);
+    printArray(small_array, size_small);
 
     return 0;
 }
@@ -69,7 +72,7 @@ void printArray(int arr[], int size)
     for(int n = 0; n < size; n++)
     {
         printf("%d", arr[n]);
-        if(n > 0 && n < size-1)
+        if(n < size-1)
         {
             printf(", ");
         }
