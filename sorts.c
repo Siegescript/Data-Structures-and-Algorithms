@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <limits.h>
 
 void swap(int*, int*);
 void printArray(int[], int);
@@ -130,6 +131,47 @@ void heapify(int Heap[], int size, int i)
         heapify(Heap, size, largest);
     }
 }
+
+void tournamentSort(int arr[], int size) 
+{
+    int tree[2 * size];
+
+    for(int i = 0; i < size; i++) 
+    {
+        tree[size + i] = arr[i];
+    }
+
+    for(int i = size - 1; i > 0; --i) 
+    {
+        tree[i] = tree[2 * i] > tree[2 * i + 1] ? tree[2 * i] : tree[2 * i + 1];
+    }
+
+    for(int i = size - 1, index; i >= 0; --i) 
+    {
+        arr[i] = tree[1];
+        index = 1;
+
+        while(index < size) 
+        {
+            if(tree[2 * index] == tree[1]) 
+            {
+                tree[2 * index] = INT_MIN;
+                index = 2 * index;
+            }
+            else
+            {
+                tree[2 * index + 1] = INT_MIN;
+                index = 2 * index + 1;
+            }
+        }
+
+        for(int j = index / 2; j > 0; j /= 2) 
+        {
+            tree[j] = tree[2 * j] > tree[2 * j + 1] ? tree[2 * j] : tree[2 * j + 1];
+        }
+    }
+}
+
 
 void heapSort(int arr[], int size)
 {
