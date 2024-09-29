@@ -49,6 +49,9 @@ int main()
         33, 70, 26, 95, 30, 74, 8, 94, 50, 74
     };
 
+    int size_small = sizeof(small_array) / sizeof(small_array[0]);
+    int size_large = sizeof(large_array) / sizeof(large_array[0]);
+
 
     return 0;
 }
