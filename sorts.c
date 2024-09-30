@@ -52,6 +52,11 @@ int main()
     int size_small = sizeof(small_array) / sizeof(small_array[0]);
     int size_large = sizeof(large_array) / sizeof(large_array[0]);
 
+    printArray(large_array, size_large);
+    printf("\n");
+    tournamentSort(large_array, size_large);
+    printArray(large_array, size_large);
+
     return 0;
 }
 
@@ -166,19 +171,19 @@ void heapSort(int arr[], int size)
 
 void tournamentSort(int arr[], int size) 
 {
-    int tree[2 * size];
+    int tree[2 * size - 1];
 
     for(int i = 0; i < size; i++) 
     {
         tree[size + i] = arr[i];
     }
 
-    for(int i = size - 1; i > 0; --i) 
+    for(int i = size - 1; i > 0; i--) 
     {
         tree[i] = tree[2 * i] > tree[2 * i + 1] ? tree[2 * i] : tree[2 * i + 1];
     }
 
-    for(int i = size - 1, index; i >= 0; --i) 
+    for(int i = size - 1, index; i >= 0; i--) 
     {
         arr[i] = tree[1];
         index = 1;
