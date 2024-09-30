@@ -208,10 +208,10 @@ void bubbleSort(int arr[], int size)
 {
     bool swapped = true;
 
-    for(int i = 0; i < size - 1 && swapped; i++)
+    for(int i = 0; i < size - 1 && swapped == true; i++)
     {
         swapped = false;
-        for(int ndx; ndx < size - i - 1; ndx++)
+        for(int ndx = 0; ndx < size - i - 1; ndx++)
         {
             if(arr[ndx] > arr[ndx+1])
             {
