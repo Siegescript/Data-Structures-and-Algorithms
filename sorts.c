@@ -28,6 +28,10 @@ void strandSort();
 
 void heapify(int[], int, int);
 void heapSort(int[], int);
+
+int winner(int, int, int[], int);
+void createTree(int[], int[], int, int*);
+void recreate(int[], int, int*);
 void tournamentSort(int[], int);
 
 void bubbleSort(int[], int);
@@ -52,10 +56,10 @@ int main()
     int size_small = sizeof(small_array) / sizeof(small_array[0]);
     int size_large = sizeof(large_array) / sizeof(large_array[0]);
 
-    printArray(large_array, size_large);
+    printArray(small_array, size_small);
     printf("\n");
-    tournamentSort(large_array, size_large);
-    printArray(large_array, size_large);
+    tournamentSort(small_array, size_small);
+    printArray(small_array, size_small);
 
     return 0;
 }
@@ -169,43 +173,68 @@ void heapSort(int arr[], int size)
     }
 }
 
+int winner(int pos1, int pos2, int tmp[], int size) 
+{
+    int u = pos1 >= size ? pos1 : tmp[pos1]; 
+    int v = pos2 >= size ? pos2 : tmp[pos2];
+
+    return (tmp[u] <= tmp[v]) ? u : v;
+}
+
+void createTree(int arr[], int tmp[], int size, int *value) 
+{
+    for(int i = 0; i < size; i++)
+    {
+        tmp[size + i] = arr[i];
+    }
+
+    for(int i = 2 * size - 1; i > 1; i -= 2) 
+    {
+        int k = i / 2;
+        int j = i - 1;
+        tmp[k] = winner(i, j, tmp, size);
+    }
+
+    *value = tmp[tmp[1]];
+    tmp[tmp[1]] = INT_MAX;
+}
+
+
+void recreate(int tmp[], int size, int *value) 
+{
+    int i = tmp[1];
+
+    while(i > 1) 
+    {
+        int j, k = i / 2;
+        if (i % 2 == 0 && i < 2 * size - 1)
+        {
+            j = i + 1;
+        }else
+        {
+            j = i - 1;
+        }
+
+        tmp[k] = winner(i, j, tmp, size);
+        i = k;
+    }
+
+    *value = tmp[tmp[1]];
+    tmp[tmp[1]] = INT_MAX;
+}
+
+
 void tournamentSort(int arr[], int size) 
 {
-    int tree[2 * size - 1];
+    int tmp[2 * size];
+    int value;
+
+    createTree(arr, tmp, size, &value);
 
     for(int i = 0; i < size; i++) 
     {
-        tree[size + i] = arr[i];
-    }
-
-    for(int i = size - 1; i > 0; i--) 
-    {
-        tree[i] = tree[2 * i] > tree[2 * i + 1] ? tree[2 * i] : tree[2 * i + 1];
-    }
-
-    for(int i = size - 1, index; i >= 0; i--) 
-    {
-        arr[i] = tree[1];
-        index = 1;
-
-        while(index < size) 
-        {
-            if(tree[2 * index] == tree[1]) 
-            {
-                tree[2 * index] = INT_MIN;
-                index = 2 * index;
-            }
-            else
-            {
-                tree[2 * index + 1] = INT_MIN;
-                index = 2 * index + 1;
-            }
-        }
-
-        for(int j = index / 2; j > 0; j /= 2) 
-        {
-            tree[j] = tree[2 * j] > tree[2 * j + 1] ? tree[2 * j] : tree[2 * j + 1];
-        }
+        arr[i] = value;
+        recreate(tmp, size, &value);
     }
 }
 
