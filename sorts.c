@@ -52,10 +52,6 @@ int main()
     int size_small = sizeof(small_array) / sizeof(small_array[0]);
     int size_large = sizeof(large_array) / sizeof(large_array[0]);
 
-    printArray(small_array, size_small);
-    tournamentSort(small_array, size_small);
-    printArray(small_array, size_small);
-
     return 0;
 }
 
@@ -63,7 +59,7 @@ void swap(int *A, int *B)
 {
     int tmp = *A;
     *A = *B;
-    *B = *A;
+    *B = tmp;
 }
 
 void printArray(int arr[], int size)
@@ -77,7 +73,7 @@ void printArray(int arr[], int size)
             printf(", ");
         }
     }
-    printf("}\n\n");
+    printf("}\n");
 }
 
 void selectionSort(int arr[], int size)
@@ -131,24 +127,40 @@ void shellSort(int arr[], int size)
 
 void heapify(int Heap[], int size, int i)
 {
-    int largest = i;
+    int root = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
+    int temp;
 
-    if(left < size && Heap[left] > Heap[right])
+    if(left < size && Heap[left] > Heap[root])
     {
-        largest = left;
+        root = left;
     }
 
-    if(right < size && Heap[right] > Heap[largest])
+    if(right < size && Heap[right] > Heap[root])
     {
-        largest = right;
+        root = right;
     }    
 
-    if(largest != i) 
+    if(root != i) 
     {
-        swap(&Heap[i], &Heap[largest]);
-        heapify(Heap, size, largest);
+        swap(&Heap[i], &Heap[root]);
+        heapify(Heap, size, root);
+    }
+}
+
+void heapSort(int arr[], int size)
+{
+    int temp;
+    for(int i = size / 2 - 1; i >= 0; i--)
+    {
+        heapify(arr, size, i);
+    }
+  
+    for(int i = size - 1; i > 0; i--)
+    {
+        swap(&arr[0], &arr[i]);
+        heapify(arr, i, 0);
     }
 }
 
@@ -189,21 +201,6 @@ void tournamentSort(int arr[], int size)
         {
             tree[j] = tree[2 * j] > tree[2 * j + 1] ? tree[2 * j] : tree[2 * j + 1];
         }
-    }
-}
-
-
-void heapSort(int arr[], int size)
-{
-    for (int i = size / 2 - 1; i >= 0; i--)
-    {
-        heapify(arr, size, i);
-    }
-  
-    for (int i = size - 1; i >= 0; i--)
-    {
-      swap(&arr[0], &arr[i]);
-      heapify(arr, i, 0);
     }
 }
 
