@@ -3,12 +3,19 @@
 #include <stdbool.h>
 #include <limits.h>
 
-void swap(int*, int*);
-void printArray(int[], int);
-
+// Time: best - n^2, average - n^2, worst - n^2
+// Space: 1
+// Unstable
 void selectionSort(int[], int);
 
+// Time: best - n, average - n^2, worst - n^2
+// Space: 1
+// Stable
 void insertionSort(int[], int);
+
+// Time: best - n log(n), average - n (log(n))^2, worst - n (log(n))^2 (<= n^2)
+// Space: 1
+// Unstable
 void shellSort(int[], int);
 
 void quickSort();
@@ -26,16 +33,32 @@ void gnomeSort();
 
 void strandSort();
 
-void heapify(int[], int, int);
+// Time: best - n log(n), average - n log(n), worst - n log(n)
+// Space: 1
+// Unstable
 void heapSort(int[], int);
+void heapify(int[], int, int);
 
+// Time: best - n log(n), average - n log(n), worst - n log(n)
+// Space: n
+// Unstable
+void tournamentSort(int[], int);
 int winner(int, int, int[], int);
 void createTree(int[], int[], int, int*);
 void recreate(int[], int, int*);
-void tournamentSort(int[], int);
 
+// Time: best - n, average - n^2, worst - n^2
+// Space: 1
+// Stable
 void bubbleSort(int[], int);
+
+// Time: best - n log(n), average - n^2/2^p : p = no. of increments, worst - n^2
+// Space: 1
+// Unstable 
 void combSort(int[], int);
+
+void swap(int*, int*);
+void printArray(int[], int);
 
 int main()
 {
@@ -58,7 +81,7 @@ int main()
 
     printArray(small_array, size_small);
     printf("\n");
-    tournamentSort(small_array, size_small);
+    shellSort(small_array, size_small);
     printArray(small_array, size_small);
 
     return 0;
@@ -119,13 +142,13 @@ void insertionSort(int arr[], int size)
 
 void shellSort(int arr[], int size)
 {
-    for (int gap = size / 2; gap > 0; gap /= 2)
+    for(int gap = size / 2; gap > 0; gap /= 2)
     {
-        for (int i = gap, ndx, key; i < size; i++)
+        for(int i = gap, ndx, key; i < size; i++)
         {  
             key = arr[i];
             ndx = i;
-            for (; ndx >= gap && arr[ndx - gap] > key; ndx -= gap)
+            for(; ndx >= gap && arr[ndx - gap] > key; ndx -= gap)
             {
                 arr[ndx] = arr[ndx - gap];
             }
