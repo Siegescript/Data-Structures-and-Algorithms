@@ -2,7 +2,7 @@
 
 // Time: best - n log(n), average - n log(n), worst - n^2
 // Space: log(n) or n
-// No
+// Unstable
 void quickSort(int[], int, int);
 int partitionLomuto(int[], int, int);
 int partitionHoare(int[], int, int);
