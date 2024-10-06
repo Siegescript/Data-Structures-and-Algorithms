@@ -1,8 +1,7 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-// Time: best - n, average - n + k where k = possible values, worst - n^2
-// Space: n
+// Time: best - n + k, average - n + k where k = possible values, worst - n + k
+// Space: k
 // Stable
 void countSort(int[], int);
 
@@ -46,7 +45,13 @@ void countSort(int arr[], int size)
             max = arr[i];
         }
     }
-    int *count = (int*)calloc(max + 1, sizeof(int));
+    
+    int count[max + 1];
+
+    for(int i = 0; i <= max; ++i) 
+    {
+        count[i] = 0;
+    }
 
     for(int i = 0; i < size; i++)
     {
@@ -62,8 +67,6 @@ void countSort(int arr[], int size)
             count[i]--;
         }
     }
-
-    free(count);
 }
 
 void swap(int *A, int *B)
