@@ -1,9 +1,29 @@
-#ignore all .exe files
+# Executables & Binaries
 *.exe
+*.out
+*.app
+bin/
+build/
 
-#ignore the vscode folder
-.vscode
+# Object Files & Libraries
+*.o
+*.obj
+*.a
+*.so
+*.dylib
 
-#ignores files that are to be read and written
+# Debug Information
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Editor & OS Files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Dynamic Data/Input Files
 *.txt
 *.dat
+*.log
