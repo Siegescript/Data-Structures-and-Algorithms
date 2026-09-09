@@ -1,148 +1,184 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
-typedef struct node{
-    char data;
+typedef char ElementType;
+
+typedef struct node {
+    ElementType data;
     struct node *link;
-}*LIST,NODE;
+} Node, *NodeList;
 
-LIST createNode();
-void initList(LIST* head);
-void nullList(LIST* head);
-void insFirst(LIST* head,char elem);
-void insLast(LIST* head,char elem);
-void insert(LIST* head,char elem,int ndx);
-void delFirst(LIST* head);
-void delLast(LIST* head);
-void delete(LIST* head,int ndx);
-void display(LIST head);
+// Core API
+void initList(NodeList *head);
+void freeList(NodeList *head);
+void insert(NodeList *head, ElementType elem, int ndx);
+void delete(NodeList *head, int ndx);
 
-void main()
-{
-    LIST head;
+// Wrappers
+void insFirst(NodeList *head, ElementType elem);
+void insLast(NodeList *head, ElementType elem);
+void delFirst(NodeList *head);
+void delLast(NodeList *head);
+
+// Utility
+bool isEmpty(NodeList head);
+int indexOf(NodeList head, ElementType elem);
+void display(NodeList head);
+
+// Internal helper for node allocation
+static NodeList createNode(ElementType elem) {
+    NodeList newNode = malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("CRITICAL ERROR: Memory allocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = elem;
+    newNode->link = NULL;
+    return newNode;
+}
+
+int main(void) {
+    NodeList head;
 
     initList(&head);
 
-    insLast(&head,'F');
-    insLast(&head,'U');
-    insLast(&head,'C');
-    insLast(&head,'K');
+    insLast(&head, 'U');
+    insLast(&head, 'K');
+    insFirst(&head, 'F');
+    insert(&head, 'C', 2);
 
-    delete(&head,4);
-
+    printf("--- Initial List ---\n");
     display(head);
 
-    nullList(&head);
+    delete(&head, 2); // Delete 'C' (index 2)
+
+    printf("\n--- After Deleting Index 2 ---\n");
+    display(head);
+
+    freeList(&head);
+
+    return 0;
 }
 
-void initList(LIST* head)
-{
-    *head=NULL;
+void initList(NodeList *head) {
+    *head = NULL;
 }
 
-void nullList(LIST* head)
-{
-    for(;(*head)!=NULL;delFirst(head)){}
-}
-
-LIST createNode()
-{
-    LIST node=(LIST)malloc(sizeof(NODE));
-    node->link=NULL;
-    return node;
-}
-
-void insFirst(LIST* head,char elem)
-{
-    LIST node=createNode();
-    node->data=elem;
-    node->link=*head;
-    *head=node;
-}
-
-void insLast(LIST* head,char elem)
-{
-    LIST *trav, node=createNode();
-    node->data=elem;
-    if(*head!=NULL)
-    {
-        for(trav=head;(*trav)->link!=NULL;trav=&(*trav)->link){}
-        (*trav)->link=node;
-    }else
-    {
-        *head=node;
+void freeList(NodeList *head) {
+    NodeList current = *head;
+    while (current != NULL) {
+        NodeList nextNode = current->link;
+        free(current);
+        current = nextNode;
     }
+    *head = NULL;
 }
 
-void insert(LIST* head,char elem,int ndx){
-    LIST *trav,node=createNode();
-    int ctr;
-    node->data=elem;
-    if(*head!=NULL||ndx!=0)
-    {
-        for(trav=head,ctr=0;(*trav)->link!=NULL&&ctr<ndx;trav=&(*trav)->link,ctr++){}
-        if((*trav)->link!=NULL)
-        {
-            node->link=(*trav)->link;
+void insert(NodeList *head, ElementType elem, int ndx) {
+    if (ndx < 0) {
+        printf("ERROR: Invalid index.\n");
+        return;
+    }
+
+    NodeList *trav = head;
+    int ctr = 0;
+
+    // Traverse using pointer2pointer until target index or end of list
+    while(*trav != NULL && ctr < ndx) {
+        trav = &((*trav)->link);
+        ctr++;
+    }
+
+    if (ctr < ndx) {
+        printf("ERROR: index out of bounds.\n");
+        return;
+    }
+
+    NodeList newNode = createNode(elem);
+    newNode->link = *trav;
+    *trav = newNode;
+}
+
+void delete(NodeList *head, int ndx) {
+    if (isEmpty(*head)) {
+        printf("ERROR: Cannot delete from an empty list.\n");
+        return;
+    }
+    if (ndx < 0) {
+        printf("ERROR: Indalid index.\n");
+        return;
+    }
+
+    NodeList *trav = head;
+    int ctr = 0;
+
+    while (*trav != NULL && ctr < ndx) {
+        trav = &((*trav)->link);
+        ctr++;
+    }
+
+    if (*trav == NULL) {
+        printf("ERROR: Index out of bounds.\n");
+        return;
+    }
+
+    NodeList temp = *trav;
+    *trav = temp->link;
+    free(temp);
+}
+
+void insFirst(NodeList *head, ElementType elem) {
+    insert(head, elem, 0);
+}
+
+void insLast(NodeList *head, ElementType elem) {
+    NodeList *trav = head;
+    while (*trav != NULL) {
+        trav = &((*trav)->link);
+    }
+    *trav = createNode(elem);
+}
+
+void delFirst(NodeList *head) {
+    delete(head, 0);
+}
+
+void delLast(NodeList *head) {
+    if (isEmpty(*head)) return;
+
+    NodeList *trav = head;
+    while ((*trav)->link != NULL) {
+        trav = &((*trav)->link);
+    }
+    free(*trav);
+    *trav = NULL;
+}
+
+bool isEmpty(NodeList head) {
+    return head == NULL;
+}
+
+int indexOf(NodeList head, ElementType elem) {
+    int index = 0;
+    for (NodeList trav = head; trav != NULL; trav = trav->link, index++) {
+        if (trav->data == elem) {
+            return index;
         }
-        (*trav)->link=node;
-    }else
-    {
-        node->link=*head;
-        *head=node;
     }
+    return -1;
 }
 
-void delFirst(LIST* head)
-{
-    LIST del;
-    if(*head!=NULL)
-    {
-        del=*head;
-        *head=(*head)->link;
-        free(del);
+void display(NodeList head) {
+    if (isEmpty(head)) {
+        printf("LIST IS EMPTY\n");
+        return;
     }
-}
-
-void delLast(LIST* head)
-{
-    LIST *trav;
-    if(*head!=NULL)
-    {
-        for(trav=head;(*trav)->link!=NULL;trav=&(*trav)->link){}
-        free(*trav);
-        *trav=NULL;
-    }
-}
-
-void delete(LIST* head,int ndx)
-{
-    LIST *trav,del;
-    int ctr;
-    if(*head!=NULL)
-    {
-        for(trav=head,ctr=0;(*trav)->link!=NULL&&ctr<ndx;trav=&(*trav)->link,ctr++){}
-        del=(*trav);
-        if((*trav)->link!=NULL)
-        {
-            (*trav)=(*trav)->link;
-        }else
-        {
-            (*trav)=NULL;
-        }
-        free(del);
-    }
-}
-
-void display(LIST head)
-{
-    LIST trav;
-    for(trav=head;trav!=NULL;trav=trav->link)
-    {
-        printf("%c",trav->data);
-        if(trav->link!=NULL)
-        {
-            printf("-->");
+    for (NodeList trav = head; trav != NULL; trav = trav->link) {
+        printf("%c", trav->data);
+        if (trav->link != NULL) {
+            printf(" --> ");
         }
     }
+    printf("\n");
 }
