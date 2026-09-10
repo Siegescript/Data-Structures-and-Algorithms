@@ -27,7 +27,7 @@ void delFirst(ArrayList *LIST);
 void delLast(ArrayList *LIST);
 
 // Utility
-bool getElem(ArrayList LIST, int ndx, ElementType *outElem);
+ElementType getElem(ArrayList L, int ndx);
 void setElem(ArrayList *LIST, int ndx, ElementType elem);
 int indexOf(ArrayList LIST, ElementType elem);
 bool isEmpty(ArrayList LIST);
@@ -144,12 +144,11 @@ void delLast(ArrayList *LIST) {
     delete(LIST, LIST->count);
 }
 
-bool getElem(ArrayList LIST, int ndx, ElementType *outElem) {
-    if (ndx < 0 || ndx >= LIST.count) {
-        return false; // Out of bounds
+ElementType getElem(ArrayList L, int ndx) {
+    if (ndx >= 0 && ndx < L.count) {
+        return L.elem[ndx];
     }
-    *outElem = LIST.elem[ndx];
-    return true; 
+    return '\0'; // Return null character on failure
 }
 
 void setElem(ArrayList *LIST, int ndx, ElementType elem) {
