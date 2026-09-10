@@ -1,184 +1,214 @@
-#include<stdio.h>
-#define MAX 5
-#define null -1
+#include <stdio.h>
+#include <stdbool.h>
 
-typedef int LIST;
+#define MAX 10
+#define NULL_LINK -1
 
-typedef struct node
-{
-    char data;
-    LIST link;
-}NODE;
+typedef int ListPos;
+typedef char ElementType;
 
-typedef struct heap
-{
-    NODE elem[MAX];
-    LIST avail;
-}HEAP;
+typedef struct node {
+    ElementType data;
+    ListPos link;
+} Node;
 
-LIST alloc(HEAP* H);
-void dealloc(HEAP* H, LIST del);
-void initHeap(HEAP* H);
+typedef struct heap {
+    Node elem[MAX];
+    ListPos avail;
+} Heap;
 
-void initList(LIST* head);
-void nullList(HEAP* H, LIST* head);
-void insFirst(HEAP* H,LIST* head,char elem);
-void insLast(HEAP* H,LIST* head,char elem);
-void insert(HEAP* H,LIST* head,char elem,int ndx);
-void delFirst(HEAP* H,LIST* head);
-void delLast(HEAP* H,LIST* head);
-void delete(HEAP* H,LIST* head,int ndx);
-void display(HEAP H, LIST head);
+// Core API
+void initHeap(Heap *H);
+void initList(ListPos *head);
+void insert(Heap *H, ListPos *head, ElementType elem, int ndx);
+void delete(Heap *H, ListPos *head, int ndx);
 
-int main ()
-{
-    HEAP H;
-    LIST head;
-    initHeap(&H);
+// Wrappers
+void insFirst(Heap *H, ListPos *head, ElementType elem);
+void insLast(Heap *H, ListPos *head, ElementType elem);
+void delFirst(Heap *H, ListPos *head);
+void delLast(Heap *H, ListPos *head);
+void freeList(Heap *H, ListPos *head);
 
-    initList(&head);
+// Utility
+void display(Heap H, ListPos head);
 
-    insert(&H,&head,'F',1);
-    insert(&H,&head,'U',1);
-    insert(&H,&head,'C',3);
-    insert(&H,&head,'K',2);
-
-    delete(&H,&head,2);
-
-    display(H,head);
-
-    nullList(&H,&head);
-
-    return 0;   
-}
-
-LIST alloc(HEAP* H)
-{
-    LIST ret=H->avail;
-    H->avail=H->elem[ret].link;
-    H->elem[ret].link=null;
+// Internal Memory Management Helpers
+static ListPos allocNode(Heap *H) {
+    ListPos ret = H->avail;
+    if (ret != NULL_LINK) {
+        H->avail = H->elem[ret].link;
+        H->elem[ret].link = NULL_LINK;
+    }
     return ret;
 }
 
-void dealloc(HEAP* H, LIST del)
-{
-    H->elem[del].link=H->avail;
-    H->avail=del;
+static void deallocNode(Heap *H, ListPos del) {
+    H->elem[del].link = H->avail;
+    H->avail = del;
 }
 
-void initHeap(HEAP* H)
-{
-    int ndx=MAX-1;
-    H->avail=ndx;
-    for(;ndx>=0;ndx--)
-    {
-        H->elem[ndx].link=ndx-1;
+int main(void) {
+    Heap H;
+    ListPos head;
+    
+    initHeap(&H);
+    initList(&head);
+
+    insLast(&H, &head, 'U');
+    insLast(&H, &head, 'K');
+    insFirst(&H, &head, 'F');
+    insert(&H, &head, 'C', 2);
+
+    printf("--- Cursor List Initial ---\n");
+    display(H, head);
+
+    delete(&H, &head, 2); // Delete index 2 ('C')
+
+    printf("\n--- After Deleting Index 2 ---\n");
+    display(H, head);
+
+    freeList(&H, &head);
+    return 0;
+}
+
+void initHeap(Heap *H) {
+    for (int i = MAX - 1; i >= 0; i--) {
+        H->elem[i].link = i - 1;
+    }
+    H->avail = MAX - 1;
+}
+
+void initList(ListPos *head) {
+    *head = NULL_LINK;
+}
+
+void freeList(Heap *H, ListPos *head) {
+    while (*head != NULL_LINK) {
+        delFirst(H, head);
     }
 }
 
-void initList(LIST* head)
-{
-    *head=null;
-}
+void insert(Heap *H, ListPos *head, ElementType elem, int ndx) {
+    if (ndx < 0) return;
 
-void nullList(HEAP* H,LIST* head)
-{
-    for(;*head!=null;delFirst(H,head));
-}
-
-void insFirst(HEAP* H,LIST* head, char elem)
-{
-    LIST ndx=alloc(H);
-    H->elem[ndx].data=elem;
-    H->elem[ndx].link=*head;
-    *head=ndx;
-}
-
-void insLast(HEAP* H,LIST* head, char elem)
-{
-    LIST ndx=alloc(H);
-    LIST trav;
-    H->elem[ndx].data=elem;
-    if(*head==null)
-    {
-        *head=ndx;
-    }else
-    {
-        for(trav=*head;H->elem[trav].link!=null;trav=H->elem[trav].link){}
-        H->elem[trav].link=ndx;
+    ListPos newNode = allocNode(H);
+    if (newNode == NULL_LINK) {
+        printf("ERROR: Heap overflow (Cursor list is full).\n");
+        return;
     }
+    H->elem[newNode].data = elem;
+
+    if (ndx == 0) {
+        H->elem[newNode].link = *head;
+        *head = newNode;
+        return;
+    }
+
+    ListPos trav = *head;
+    int ctr = 0;
+    while (trav != NULL_LINK && ctr < ndx - 1) {
+        trav = H->elem[trav].link;
+        ctr++;
+    }
+
+    if (trav == NULL_LINK) {
+        printf("Error: Index out of bounds.\n");
+        deallocNode(H, newNode);
+        return;
+    }
+
+    H->elem[newNode].link = H->elem[trav].link;
+    H->elem[trav].link = newNode;
 }
 
-void insert(HEAP* H,LIST* head,char elem,int ndx)
-{
-    LIST trav,node=alloc(H);
-    int ctr;
-    H->elem[node].data=elem;
-    if(*head!=null||ndx!=0)
-    {
-        for(trav=*head,ctr=0;H->elem[trav].link!=null&&ctr<ndx;trav=H->elem[trav].link){}
-        if(H->elem[trav].link!=null)
-        {
-            H->elem[node].link=H->elem[trav].link;
+void delete(Heap *H, ListPos *head, int ndx) {
+    if (*head == NULL_LINK || ndx < 0) {
+        printf("ERROR: List is empty or index invalid.\n");
+        return;
+    }
+
+    ListPos delNode = NULL_LINK;
+
+    if (ndx == 0) {
+        delNode = *head;
+        *head = H->elem[delNode].link;
+    } else {
+        ListPos trav = *head;
+        int ctr = 0;
+        while (trav != NULL_LINK && ctr < ndx - 1) {
+            trav = H->elem[trav].link;
+            ctr++;
         }
-        H->elem[trav].link=node;
-    }else
-    {
-        H->elem[node].link=*head;
-        *head=node;
-    }
-}
 
-void delFirst(HEAP* H,LIST* head)
-{
-    LIST del;
-    if(*head!=null)
-    {
-        del=*head;
-        *head=H->elem[*head].link;
-        dealloc(H,del);
-    }
-}
-
-void delLast(HEAP *H,LIST* head)
-{
-    LIST trav;
-    if(*head!=null)
-    {
-        for(trav=*head;H->elem[trav].link!=null;trav=H->elem[trav].link){}
-        dealloc(H,H->elem[trav].link);
-        H->elem[trav].link;       
-    }
-}
-
-void delete(HEAP *H,LIST* head,int ndx)
-{
-    LIST trav,prev,del;
-    int ctr;
-    if(*head!=null)
-    {
-        for(trav=*head,ctr=0;H->elem[H->elem[trav].link].link!=null&&ctr<ndx;prev=trav,trav=H->elem[trav].link,ctr++){}
-        del=trav;
-        if(H->elem[trav].link!=null)
-        {
-            H->elem[prev].link=H->elem[trav].link;
-        }else
-        {
-            H->elem[prev].link=null;
+        if (trav == NULL_LINK || H->elem[trav].link == NULL_LINK) {
+            printf("ERROR: Index out of bounds.\n");
+            return;
         }
-        dealloc(H,del);
+
+        delNode = H->elem[trav].link;
+        H->elem[trav].link = H->elem[delNode].link;
+    }
+
+    deallocNode(H, delNode);
+}
+
+void insFirst(Heap *H, ListPos *head, ElementType elem) {
+    insert(H, head, elem, 0);
+}
+
+void insLast(Heap *H, ListPos *head, ElementType elem) {
+    ListPos newNode = allocNode(H);
+    if (newNode == NULL_LINK) {
+        printf("ERROR: Heap overflow.\n");
+        return;
+    }
+    H->elem[newNode].data = elem;
+    H->elem[newNode].link = NULL_LINK;
+
+    if (*head == NULL_LINK) {
+        *head = newNode;
+    } else {
+        ListPos trav = *head;
+        while (H->elem[trav].link != NULL_LINK) {
+            trav = H->elem[trav].link;
+        }
+        H->elem[trav].link = newNode;
     }
 }
 
-void display(HEAP H,LIST head)
-{
-    LIST trav;
-    for(trav=head;trav!=null;trav=H.elem[trav].link)
-    {
-        printf("%c|%d",H.elem[trav].data,H.elem[trav].link);
-        if(H.elem[trav].link!=null)
-        {
-            printf("-->");
+void delFirst(Heap *H, ListPos *head) {
+    delete(H, head, 0);
+}
+
+void delLast(Heap *H, ListPos *head) {
+    if (*head == NULL_LINK) return;
+
+    if (H->elem[*head].link == NULL_LINK) {
+        deallocNode(H, *head);
+        *head = NULL_LINK;
+        return;
+    }
+
+    ListPos trav = *head;
+    while (H->elem[H->elem[trav].link].link != NULL_LINK) {
+        trav = H->elem[trav].link;
+    }
+
+    deallocNode(H, H->elem[trav].link);
+    H->elem[trav].link = NULL_LINK;
+}
+
+void display(Heap H, ListPos head) {
+    if (head == NULL_LINK) {
+        printf("LIST IS EMPTY\n");
+        return;
+    }
+    for (ListPos trav = head; trav != NULL_LINK; trav = H.elem[trav].link) {
+        printf("%c | idx:%d (link:%d)", H.elem[trav].data, trav, H.elem[trav].link);
+        if (H.elem[trav].link != NULL_LINK) {
+            printf(" --> ");
         }
     }
+    printf("\n");
 }
