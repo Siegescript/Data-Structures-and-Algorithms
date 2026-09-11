@@ -15,16 +15,17 @@ A organized collection of fundamental data structures and algorithmic implementa
 - [x] **Cursor Stack** — LIFO cursor-backed stack (`O(1)` push/pop)
 - [x] **Array Queue** — FIFO circular array queue (`O(1)` enqueue/dequeue)
 - [x] **Linked Queue** — FIFO pointer-backed queue (`O(1)` enqueue/dequeue)
+- [x] **Cursor Queue** — FIFO cursor-backed queue (`O(1)` enqueue/dequeue)
 
 ### Sets & Dictionaries
-- [x] **Bit Vector Set** — Fast set operations via bitwise operations (`O(1)` lookups)
-- [x] **Computer Word Set** — Set encoding in standard machine word formats
-- [x] **Open Hashing Dictionary** — Separate chaining hash table (`O(1)` avg lookup)
-- [x] **Closed Hashing Dictionary** — Open addressing / linear or quadratic probing (`O(1)` avg lookup)
+- [ ] **Bit Vector Set** — Fast set operations via bitwise operations (`O(1)` lookups)
+- [ ] **Computer Word Set** — Set encoding in standard machine word formats
+- [ ] **Open Hashing Dictionary** — Separate chaining hash table (`O(1)` avg lookup)
+- [ ] **Closed Hashing Dictionary** — Open addressing / linear or quadratic probing (`O(1)` avg lookup)
 
 ### Trees & Priority Queues
-- [x] **Binary Tree** — Basic tree node traversals (Pre-order, In-order, Post-order)
-- [x] **Partially Ordered Tree (Heap)** — Binary Min/Max Heap (`O(log N)` insert/extract)
+- [ ] **Binary Tree** — Basic tree node traversals (Pre-order, In-order, Post-order)
+- [ ] **Partially Ordered Tree (Heap)** — Binary Min/Max Heap (`O(log N)` insert/extract)
 - [ ] **Binary Search Tree (BST)** — Search tree supporting dynamic updates (`O(log N)` avg search)
 - [ ] **AVL Tree** — Self-balancing BST with LL/RR/LR/RL rotations (`O(log N)` worst-case search)
 - [ ] **Trie (Prefix Tree)** — Fast retrieval for dictionary strings (`O(L)` lookup where L = key length)
@@ -45,22 +46,22 @@ A organized collection of fundamental data structures and algorithmic implementa
 
 ### Sorting Algorithms
 #### Core
-- [x] **Bubble Sort** — `O(N²)` time | `O(1)` space
-- [x] **Insertion Sort** — `O(N²)` time | `O(1)` space
-- [x] **Selection Sort** — `O(N²)` time | `O(1)` space
-- [x] **Merge Sort** — `O(N log N)` time | `O(N)` space
-- [x] **Quick Sort** — `O(N log N)` avg time | `O(log N)` space
-- [x] **Heap Sort** — `O(N log N)` time | `O(1)` space
-- [x] **Counting Sort** — `O(N + K)` non-comparison sort
-- [x] **Radix Sort** — `O(N · K)` digit-by-digit distribution sort
+- [ ] **Bubble Sort** — `O(N²)` time | `O(1)` space
+- [ ] **Insertion Sort** — `O(N²)` time | `O(1)` space
+- [ ] **Selection Sort** — `O(N²)` time | `O(1)` space
+- [ ] **Merge Sort** — `O(N log N)` time | `O(N)` space
+- [ ] **Quick Sort** — `O(N log N)` avg time | `O(log N)` space
+- [ ] **Heap Sort** — `O(N log N)` time | `O(1)` space
+- [ ] **Counting Sort** — `O(N + K)` non-comparison sort
+- [ ] **Radix Sort** — `O(N · K)` digit-by-digit distribution sort
 
 #### Niche & Specialized
-- [x] **Shell Sort** — `O(N^1.5)` gap sequence optimization
-- [x] **Bucket Sort** — `O(N + K)` uniform distribution sort
-- [x] **Comb Sort** — Variant of bubble sort using variable gaps
-- [x] **Gnome Sort** — Single-loop sorting algorithm
-- [x] **Strand Sort** — Linked-list sublist merging sort
-- [x] **Tournament Sort** — Tree-selection based sort
+- [ ] **Shell Sort** — `O(N^1.5)` gap sequence optimization
+- [ ] **Bucket Sort** — `O(N + K)` uniform distribution sort
+- [ ] **Comb Sort** — Variant of bubble sort using variable gaps
+- [ ] **Gnome Sort** — Single-loop sorting algorithm
+- [ ] **Strand Sort** — Linked-list sublist merging sort
+- [ ] **Tournament Sort** — Tree-selection based sort
 
 ### Searching & Matching
 - [ ] **Linear Search** — Unsorted search (`O(N)`)
