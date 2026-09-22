@@ -33,8 +33,8 @@ A organized collection of fundamental data structures and algorithmic implementa
 - [ ] **Disjoint Set Union (DSU)** — Disjoint sets with path compression (`O(α(N))` operations)
 
 ### Graphs
-- [ ] **Adjacency Matrix** — Dense graph representation (`O(1)` edge lookup, `O(V²)` space)
-- [ ] **Adjacency List** — Sparse graph representation (`O(V + E)` space)
+- [X] **Adjacency Matrix** — Dense graph representation (`O(1)` edge lookup, `O(V²)` space)
+- [X] **Adjacency List** — Sparse graph representation (`O(V + E)` space)
 
 ### Multiway & External Storage Trees (B-Trees)
 - [ ] **B-Tree** — Self-balancing $m$-way tree for disk storage (`O(log N)` search/insert)
