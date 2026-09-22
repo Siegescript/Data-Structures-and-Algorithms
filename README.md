@@ -24,10 +24,9 @@ A organized collection of fundamental data structures and algorithmic implementa
 - [X] **Closed Hashing Dictionary** — Open addressing / linear or quadratic probing (`O(1)` avg lookup)
 
 ### Trees & Priority Queues
-- [X] **Binary Tree** — Basic tree node traversals (Pre-order, In-order, Post-order)
+- [x] **Binary Search Tree (BST)** — Search tree with Pre/In/Post-order traversals (`O(log N)` avg search/insert/delete)
 - [X] **Max Heap** — Array-based Max Priority Queue (`O(log N)` insert/deleteMax, `O(N)` heapify)
 - [X] **Min Heap** — Array-based Min Priority Queue (`O(log N)` insert/deleteMin)
-- [ ] **Binary Search Tree (BST)** — Search tree supporting dynamic updates (`O(log N)` avg search)
 - [ ] **AVL Tree** — Self-balancing BST with LL/RR/LR/RL rotations (`O(log N)` worst-case search)
 - [ ] **Trie (Prefix Tree)** — Fast retrieval for dictionary strings (`O(L)` lookup where L = key length)
 - [ ] **Disjoint Set Union (DSU)** — Disjoint sets with path compression (`O(α(N))` operations)
