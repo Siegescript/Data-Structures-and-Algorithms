@@ -17,12 +17,12 @@ void addVertex(Graph *G);
 void removeVertex(Graph *G, int vertex);
 void addEdge(Graph *G, int src, int dest);
 void removeEdge(Graph *G, int src, int dest);
-bool hasEdge(const Graph *G, int src, int dest);
 
 // Internal Helper
 static void resizeGraph(Graph *G, int new_capacity);
 
 // Utility
+bool hasEdge(const Graph *G, int src, int dest);
 void displayGraph(const Graph *G);
 
 int main(void) {
@@ -58,7 +58,7 @@ int main(void) {
     displayGraph(&G);
 
     // Delete a vertex
-    printf("\nDeleting Vertex B (Triggers Dynamic Expansion)...\n");
+    printf("\nDeleting Vertex B...\n");
     removeVertex(&G, 1);
 
     printf("\n--- Updated Matrix (4 Vertices) ---\n");
@@ -139,6 +139,11 @@ void removeVertex(Graph *G, int vertex) {
 
     // 4. Decrement active vertex count
     G->num_vertices--;
+
+    // 5. Optionally shrink capacity if matrix is severely underutilized (e.g. 25% full)
+    if (G->capacity > INITIAL_CAPACITY && G->num_vertices <= G->capacity / 4) {
+        resizeGraph(G, G->capacity / 2);
+    }
 }
 
 void addEdge(Graph *G, int src, int dest) {
@@ -166,20 +171,26 @@ bool hasEdge(const Graph *G, int src, int dest) {
 }
 
 static void resizeGraph(Graph *G, int new_capacity) {
+    // If downsizing, free excess rows first
+    if (new_capacity < G->capacity) {
+        for (int i = new_capacity; i < G->capacity; i++) {
+            free(G->matrix[i]);
+        }
+    }
+
     // Reallocate outer pointer array
     G->matrix = realloc(G->matrix, sizeof(bool*) * new_capacity);
 
-    // Expand existing rows to new width
-    for (int i = 0; i < G->capacity; i++) {
+    // Resize existing active rows
+    for (int i = 0; i < (new_capacity < G->capacity ? new_capacity : G->capacity); i++) {
         G->matrix[i] = realloc(G->matrix[i], sizeof(bool) * new_capacity);
-        for (int j = G->capacity; j < new_capacity; j++) {
-            G->matrix[i][j] = false;
-        }
-    } 
+    }
 
-    // Allocate brand-new rows for added height
-    for (int i = G->capacity; i < new_capacity; i++) {
-        G->matrix[i] = calloc(new_capacity, sizeof(bool));
+    // If expanding, allocate fresh rows and zero them out
+    if (new_capacity > G->capacity) {
+        for (int i = G->capacity; i < new_capacity; i++) {
+            G->matrix[i] = calloc(new_capacity, sizeof(bool));
+        }
     }
 
     G->capacity = new_capacity;
